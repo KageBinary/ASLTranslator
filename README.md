@@ -1,2 +1,0 @@
-# ASLTranslator
-ASL translator :)
