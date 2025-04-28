@@ -201,7 +201,7 @@ def collect_static_data():
         current_sign_index += 1
         
         # Save interim progress after each letter
-        if current_sign_index % 3 == 0 or current_sign_index == len(signs):
+        if current_sign_index == len(signs):
             save_progress(all_data, column_names, feature_count, signs)
     
     # Release the webcam and close windows

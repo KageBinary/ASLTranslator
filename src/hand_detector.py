@@ -45,7 +45,7 @@ class HandDetector:
         return landmark_list, landmark_dict
 
     def get_landmark_array(self, image, hand_index=0):
-        """Return a normalized flat array of [x, y, z] per landmark with extras for ML."""
+        """Return a normalized flat array of [x, y, z] per landmark with extras for ML (91 features total)."""
         landmarks, _ = self.find_positions(image, hand_index)
 
         if not landmarks:
@@ -69,7 +69,7 @@ class HandDetector:
         # Inter-finger distances
         inter_finger = [np.linalg.norm(tips[i] - tips[j]) for i in range(5) for j in range(i+1, 5)]
 
-        # 🛠️ Correct joint angle calculation for 91 features:
+        # 🛠️ Correct joint angle calculation for 2 angles per finger
         finger_joints = [
             [1, 2, 3, 4],    # Thumb
             [5, 6, 7, 8],    # Index
@@ -80,7 +80,7 @@ class HandDetector:
 
         joint_angles = []
         for finger in finger_joints:
-            for i in range(len(finger) - 2):   # 🛠 This loop now gets 2 angles per finger
+            for i in range(len(finger) - 2):   # Two angles per finger
                 p1, p2, p3 = coords[finger[i]], coords[finger[i+1]], coords[finger[i+2]]
                 v1 = p1 - p2
                 v2 = p3 - p2
@@ -89,13 +89,26 @@ class HandDetector:
                 angle = np.arccos(np.clip(dot / norm, -1.0, 1.0)) if norm > 0 else 0.0
                 joint_angles.append(angle)
 
+        # Add palm normal vector (3 features) to reach 91
+        if len(coords) > 17:
+            v1 = coords[5] - coords[0]
+            v2 = coords[17] - coords[0]
+            palm_normal = np.cross(v1, v2)
+            if np.linalg.norm(palm_normal) > 0:
+                palm_normal = palm_normal / np.linalg.norm(palm_normal)
+            else:
+                palm_normal = np.zeros(3)
+        else:
+            palm_normal = np.zeros(3)
 
         # Now combine everything
         final_array = np.concatenate([
             coords.flatten(), 
             np.array(tip_to_palm),
             np.array(inter_finger),
-            np.array(joint_angles)
+            np.array(joint_angles),
+            palm_normal
         ])
 
         return np.nan_to_num(final_array)
+
