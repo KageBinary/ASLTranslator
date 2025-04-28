@@ -14,8 +14,8 @@ def train_static_letter_model():
 # Load processed training data (features and labels)
     df = pd.read_csv('data/processed/training_data_letters_MASTER.csv')
 
-# Separate features (X) and target labels (y)
-    # ✅ Correct: Drop BOTH 'label' and 'session_id' for features
+# Separate features (X) and target labels (y) 
+    # ✅ Correct: Drop BOTH 'label' and 'session_id' for features 
     X = df.drop(columns=['label', 'session_id']).values
     y = df['label'].values
 
