@@ -33,6 +33,6 @@ def update_master_csv(data_folder='data/processed', master_filename='training_da
     print(f"Master CSV updated! {len(combined_df)} total samples from {len(csv_files)} sessions.")
     print(f"Saved to {master_path}")
 
-# Example: If you want to call it manually
+# Example: If you want to call it manually.
 if __name__ == "__main__":
     update_master_csv()
