@@ -7,6 +7,7 @@ import string
 import sys
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..')))
 
+from scripts.update_master_csv import update_master_csv
 from src.hand_detector import HandDetector
 
 def collect_static_data():
@@ -25,7 +26,10 @@ def collect_static_data():
     cap.set(cv2.CAP_PROP_FRAME_HEIGHT, 720)
     
     # Create data directory if it doesn't exist
-    os.makedirs('data/processed', exist_ok=True)
+    project_root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+    data_path = os.path.join(project_root, 'data', 'processed')
+    os.makedirs(data_path, exist_ok=True)
+
     
     # Get list of ASL signs to collect (letters A-Z except J and Z which require movement)
     signs = [letter for letter in list(string.ascii_lowercase)[:26] if letter not in ['j', 'z']]
@@ -59,11 +63,10 @@ def collect_static_data():
     sign_to_label = {sign: idx for idx, sign in enumerate(signs)}
     
     # Number of samples to collect per sign
-    base_samples = 75
     
     # Extra samples for commonly confused letters
     problem_letters = ['a', 's', 'n', 'm', 't', 'e', 'c', 'o', 'p']
-    extra_samples = {letter: 25 for letter in problem_letters}
+    extra_samples = {letter: 50 for letter in problem_letters}
     
     # Track current sign index
     current_sign_index = 0
@@ -73,7 +76,7 @@ def collect_static_data():
         sign = signs[current_sign_index]
         
         # Set sample count for this sign
-        num_samples = base_samples + extra_samples.get(sign, 0)
+        num_samples = 100 + extra_samples.get(sign, 0)
         collected_samples = 0
         
         # Define reference image path for this sign
@@ -224,7 +227,10 @@ def save_progress(all_data, column_names, feature_count, signs):
         print("This may indicate inconsistent feature extraction")
     
     # Save to CSV
-    csv_path = 'data/processed/training_data_letters.csv'
+    import datetime
+    timestamp = datetime.datetime.now().strftime('%Y%m%d_%H%M%S')
+    csv_path = f'data/processed/training_data_letters_{timestamp}.csv'
+
     df.to_csv(csv_path, index=False)
     print(f"\nSaved {len(df)} samples to {csv_path}")
     
@@ -280,3 +286,4 @@ if __name__ == "__main__":
     print("Ensure your hand is well-lit and centered in the frame")
     input("Press Enter to begin...")
     collect_static_data()
+    update_master_csv()

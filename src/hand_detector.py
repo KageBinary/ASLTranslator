@@ -60,12 +60,42 @@ class HandDetector:
         scale = np.linalg.norm(coords[9]) or 1.0
         coords /= scale
 
-        # Optional: append fingertip-to-palm and inter-finger distances
+        # Fingertip-to-palm distances
         palm = np.mean(coords[[0, 5, 9, 13, 17]], axis=0)
         tips = coords[[4, 8, 12, 16, 20]]
 
         tip_to_palm = [np.linalg.norm(t - palm) for t in tips]
+
+        # Inter-finger distances
         inter_finger = [np.linalg.norm(tips[i] - tips[j]) for i in range(5) for j in range(i+1, 5)]
 
-        final_array = np.concatenate([coords.flatten(), tip_to_palm, inter_finger])
-        return final_array
+        # 🛠️ Correct joint angle calculation for 91 features:
+        finger_joints = [
+            [1, 2, 3, 4],    # Thumb
+            [5, 6, 7, 8],    # Index
+            [9, 10, 11, 12], # Middle
+            [13, 14, 15, 16],# Ring
+            [17, 18, 19, 20] # Pinky
+        ]
+
+        joint_angles = []
+        for finger in finger_joints:
+            for i in range(len(finger) - 2):   # 🛠 This loop now gets 2 angles per finger
+                p1, p2, p3 = coords[finger[i]], coords[finger[i+1]], coords[finger[i+2]]
+                v1 = p1 - p2
+                v2 = p3 - p2
+                dot = np.dot(v1, v2)
+                norm = np.linalg.norm(v1) * np.linalg.norm(v2)
+                angle = np.arccos(np.clip(dot / norm, -1.0, 1.0)) if norm > 0 else 0.0
+                joint_angles.append(angle)
+
+
+        # Now combine everything
+        final_array = np.concatenate([
+            coords.flatten(), 
+            np.array(tip_to_palm),
+            np.array(inter_finger),
+            np.array(joint_angles)
+        ])
+
+        return np.nan_to_num(final_array)
