@@ -1,3 +1,4 @@
+# needed libraries
 import pandas as pd
 import numpy as np
 import os
@@ -10,9 +11,10 @@ from tensorflow.keras.layers import Dense, Dropout, BatchNormalization
 from tensorflow.keras.callbacks import EarlyStopping, ReduceLROnPlateau
 
 def train_static_letter_model():
-    # Load the Master CSV
+    # Load processed training data from CSV
     df = pd.read_csv('data/processed/training_data_letters_MASTER.csv')
 
+    # Separate features X and labels y
     # ✅ Correct: Drop BOTH 'label' and 'session_id' for features
     X = df.drop(columns=['label', 'session_id']).values
     y = df['label'].values
@@ -73,3 +75,5 @@ def train_static_letter_model():
 
 if __name__ == "__main__":
     train_static_letter_model()
+
+# Visually inspected. No bugs to cause any crash!
