@@ -11,24 +11,24 @@ from tensorflow.keras.layers import Dense, Dropout, BatchNormalization
 from tensorflow.keras.callbacks import EarlyStopping, ReduceLROnPlateau
 
 def train_static_letter_model():
-    # Load processed training data from CSV
+# Load processed training data (features and labels)
     df = pd.read_csv('data/processed/training_data_letters_MASTER.csv')
 
-    # Separate features X and labels y
+# Separate features (X) and target labels (y)
     # ✅ Correct: Drop BOTH 'label' and 'session_id' for features
     X = df.drop(columns=['label', 'session_id']).values
     y = df['label'].values
 
     print(f"✅ Loaded dataset with {X.shape[0]} samples and {X.shape[1]} features.")
 
-    # Double-check feature count
+# Check expected feature size (based on known dataset specification)
     if X.shape[1] != 91:
         raise ValueError(f"❌ Error: Expected 91 features, but found {X.shape[1]} features. Check your CSV!")
 
-    # Split into training and validation sets
+# Stratify ensures class distribution is preserved in train/validation split
     X_train, X_val, y_train, y_val = train_test_split(X, y, test_size=0.2, random_state=42, stratify=y)
 
-    # Normalize features
+# Standardize features to zero mean and unit variance
     scaler = StandardScaler()
     X_train = scaler.fit_transform(X_train)
     X_val = scaler.transform(X_val)
