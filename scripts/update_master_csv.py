@@ -11,6 +11,7 @@ def update_master_csv(data_folder='data/processed', master_filename='training_da
     
     # Filter out the master CSV itself if it already exists
     csv_files = [f for f in csv_files if not f.endswith(master_filename)]
+    # Bug fix. Try this option if an error or crash occurs: csv_files = [f for f in csv_files if os.path.basename(f) != master_filename]
     
     if not csv_files:
         print("No session CSV files found.")
