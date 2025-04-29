@@ -1,54 +1,71 @@
-# ASL Static Translator (Fingerspelling Recognition)
+# ASL Translator: Static, Dynamic, and Word Recognition
 
-This project allows real-time translation of American Sign Language (ASL) static alphabet signs (A–Y, excluding J and Z) using a webcam.
+This project enables real-time translation of American Sign Language (ASL) via webcam. It currently supports static letter recognition (A–Y) and is expanding toward dynamic signs and full word recognition.
 
 ---
 
 ## 🛠️ Components and What They Do
 
-| File | Purpose |
+| File/Folder | Purpose |
 |:---|:---|
-| `src/data/collect_static.py` | 📸 Collects landmark data of hand poses for each ASL letter (skipping J and Z) via webcam and saves them as CSVs. |
-| `scripts/update_master_csv.py` | 🗂️ Combines all collected CSVs into a single master dataset `training_data_letters_MASTER.csv` for model training. |
-| `scripts/train_static_model.py` | 🧠 Trains a TensorFlow neural network model on the collected landmark data and saves the model + feature scaler. |
-| `src/pipeline/static_translator.py` | 🎥 Runs a live webcam app that detects your hand sign and types letters based on consistent predictions. |
-| `src/hand_detector.py` | ✋ Wrapper around MediaPipe Hands to detect hands and extract normalized 3D landmarks and extra features for ML. |
+| `src/data_collectors/` | 📸 Scripts to collect hand pose data for static (letter) and dynamic (motion-based) signs. |
+| `src/models/` | 🧠 Defines neural network architectures for letters and word sequences. |
+| `src/pipeline/` | 👥 Pipelines for real-time translation: static, dynamic, and word-level. |
+| `src/preprocessing/` | 💡 Tools for data augmentation and sequence extraction. |
+| `src/utils/hand_detector.py` | ✋ Detects hands and extracts features using MediaPipe. |
+| `scripts/` | 📆 Training and evaluation scripts for static letters and words. |
+| `data/` | 📂 Raw, processed, and sequence data storage. |
+| `models/` | 🌐 Saved trained models and scalers. |
+| `app.py` | 📅 Main launcher (for future app integration). |
 
 ---
 
 ## 🛆 Libraries Used
 
-- **OpenCV** (`cv2`) — Webcam capture and display
+- **OpenCV** (`cv2`) — Webcam capture and processing
 - **MediaPipe** — Hand landmark detection
-- **NumPy** — Mathematical operations
-- **Pandas** — Data handling
-- **Joblib** — Model and scaler saving
-- **Scikit-learn** (`sklearn`) — Feature scaling and dataset splitting
-- **TensorFlow / Keras** — Deep learning model training
-- **glob, os, sys** — File operations
+- **NumPy** — Numerical operations
+- **Pandas** — CSV and data handling
+- **Joblib** — Saving models and scalers
+- **Scikit-learn** (`sklearn`) — Data scaling, splitting
+- **TensorFlow / Keras** — Deep learning models
+- **Matplotlib, Seaborn** — Data visualization
+- **Jupyter** — Notebook experiments
 
 ---
 
-## 🔥 Workflow (Step-by-Step)
+## 🔥 Workflow
 
-1. **Data Collection** (`collect_static.py`)
-   - Collects 91 features from hand landmarks for each letter.
-   - Saves them into session CSVs under `data/processed/`.
+### Static Letters (Fingerspelling)
 
-2. **Master Dataset Generation** (`update_master_csv.py`)
-   - Merges all session CSVs into `training_data_letters_MASTER.csv`.
+1. **Data Collection**
+   ```bash
+   python src/data_collectors/collect_static.py
+   ```
 
-3. **Model Training** (`train_static_model.py`)
-   - Loads master CSV, splits data, scales features.
-   - Trains a deep neural network model.
-   - Saves trained model (`letter_model.h5`) and scaler (`feature_scaler.pkl`).
+2. **Update Master Dataset**
+   ```bash
+   python scripts/update_master_csv.py
+   ```
 
-4. **Live Translation** (`static_translator.py`)
-   - Opens webcam.
-   - Detects hand, extracts features.
-   - Predicts letter.
-   - Types letters into a text string with stability checks.
-   - Save or clear text easily with keyboard shortcuts.
+3. **Train Static Model**
+   ```bash
+   python scripts/train_static_model.py
+   ```
+
+4. **Live Static Translator**
+   ```bash
+   python src/pipeline/static_translator.py
+   ```
+
+### Dynamic Signs (In Progress)
+- Collect motion-based sequences.
+- Train sequence models (`train_word_model.py`).
+- Run dynamic sign translator (`dynamic_translator.py`).
+
+### Word-Level Translation (In Progress)
+- Combine static and dynamic predictions.
+- Translate sequences of letters or gestures into full words (`word_translator.py`).
 
 ---
 
@@ -58,69 +75,58 @@ This project allows real-time translation of American Sign Language (ASL) static
 ASLTranslator/
 |
 |├— data/
-|   └— processed/
-|       ├— training_data_letters_*.csv
-|       └— training_data_letters_MASTER.csv
+|   ├— processed/ —> Processed CSVs
+|   ├— raw/ —> Raw capture data
+|   ├— reference/ —> Reference images
+|   └— sequences/ —> Dynamic sequence captures
 |
 |├— models/
-|   ├— feature_scaler.pkl
-|   └— letter_model.h5
+|   ├— static/ —> Static letter models
+|   └— dynamic/ —> (planned) Dynamic models
+|
+|├— src/
+|   ├— data_collectors/
+|   ├— models/
+|   ├— pipeline/
+|   ├— preprocessing/
+|   ├— utils/
 |
 |├— scripts/
-|   ├— collect_static.py
-|   ├— static_translator.py
-|   ├— train_static_model.py
-|   └— update_master_csv.py
 |
-└— src/
-    └— hand_detector.py
-```
-
----
-
-## 🧪 How to Run
-
-1. **Install required libraries**:
-```bash
-pip install opencv-python mediapipe numpy pandas scikit-learn tensorflow joblib
-```
-
-2. **Collect data**:
-```bash
-python scripts/collect_static.py
-```
-
-3. **Update master dataset**:
-```bash
-python scripts/update_master_csv.py
-```
-
-4. **Train the model**:
-```bash
-python scripts/train_static_model.py
-```
-
-5. **Run live translator**:
-```bash
-python scripts/static_translator.py
+|├— notebooks/
+|
+|├— app.py
+|├— LICENSE
+|├— README.md
+|└— requirements.txt
 ```
 
 ---
 
 ## ✨ Features
 
-- ✋ Hand tracking and pose normalization
-- 🔥 Real-time letter typing based on stable predictions
-- 🚀 Light and efficient model suitable for laptop use
-- 🔗 Text saving, clearing, spacing, and backspacing
+- 💬 Real-time static ASL letter translation
+- 💡 Data augmentation and sequence extraction for dynamic signs
+- 🧬 Early stopping and dynamic learning rate during training
+- 🔥 Light and fast model execution
+- 📢 Word-level translation planned!
 
 ---
 
 ## 📌 Notes
 
-- **Letters J and Z are skipped** (they involve motion).
-- Best results need **good lighting** and **clear hand visibility**.
-- You can adjust `detection_confidence` inside `HandDetector` if detection isn't stable.
+- Letters **J** and **Z** are excluded from static because they involve motion.
+- Good lighting and centered hands improve accuracy.
+- Future expansion includes **dynamic sequence detection** and **full word formation**!
+
+---
+
+## 🎉 Future Goals
+
+- Train dynamic sequence models
+- Integrate dynamic and static recognizers
+- Build a simple web or desktop app for users
+- Open source the full codebase with pretrained models!
 
 ---
 
