@@ -8,10 +8,10 @@ This project allows real-time translation of American Sign Language (ASL) static
 
 | File | Purpose |
 |:---|:---|
-| `scripts/collect_static.py` | 📸 Collects landmark data of hand poses for each ASL letter (skipping J and Z) via webcam and saves them as CSVs. |
+| `src/data/collect_static.py` | 📸 Collects landmark data of hand poses for each ASL letter (skipping J and Z) via webcam and saves them as CSVs. |
 | `scripts/update_master_csv.py` | 🗂️ Combines all collected CSVs into a single master dataset `training_data_letters_MASTER.csv` for model training. |
 | `scripts/train_static_model.py` | 🧠 Trains a TensorFlow neural network model on the collected landmark data and saves the model + feature scaler. |
-| `scripts/static_translator.py` | 🎥 Runs a live webcam app that detects your hand sign and types letters based on consistent predictions. |
+| `src/pipeline/static_translator.py` | 🎥 Runs a live webcam app that detects your hand sign and types letters based on consistent predictions. |
 | `src/hand_detector.py` | ✋ Wrapper around MediaPipe Hands to detect hands and extract normalized 3D landmarks and extra features for ML. |
 
 ---
