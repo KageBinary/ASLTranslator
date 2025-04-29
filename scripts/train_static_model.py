@@ -73,6 +73,11 @@ def train_static_letter_model():
     model.save('models/letter_model.h5')
     print("\n✅ Model saved to models/letter_model.h5")
 
+    import pickle
+    with open('models/history.pkl', 'wb') as f:
+        pickle.dump(history.history, f)
+    print("✅ Training history saved to models/history.pkl")
+
 if __name__ == "__main__":
     train_static_letter_model()
 
