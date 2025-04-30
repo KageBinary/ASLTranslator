@@ -6,7 +6,7 @@ This project enables real-time translation of American Sign Language (ASL) via w
 
 ## 🛠️ Components and What They Do
 
-| File/Folder | Purpose |
+| File/Folder | purpose |
 |:---|:---|
 | `src/data_collectors/` | 📸 Scripts to collect hand pose data for static (letter) and dynamic (motion-based) signs. |
 | `src/models/` | 🧠 Defines neural network architectures for letters and word sequences. |
