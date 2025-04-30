@@ -130,3 +130,14 @@ ASLTranslator/
 
 ---
 
+## 👥 Group Members
+This section highlights the contributors who are part of the ASL Translator project. Each member plays a vital role in different stages, from data collection to model training and future developments.
+
+Name
+[Ian Hock]
+Nitin Chatlani
+[Anna Krassowizki]
+[Nate Bomar]
+[Diego Lopez]
+[Pranaav Srinivasan]
+
