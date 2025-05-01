@@ -4,6 +4,7 @@ import numpy as np
 
 class HandDetector:
     def __init__(self, static_mode=False, max_hands=1, detection_confidence=0.7, tracking_confidence=0.6):
+                #Initialize MediaPipe hand detection model with specified parameters
         self.static_mode = static_mode
         self.max_hands = max_hands
         self.detection_confidence = detection_confidence

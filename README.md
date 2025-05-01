@@ -48,7 +48,7 @@ This project enables real-time translation of American Sign Language (ASL) via w
    python scripts/update_master_csv.py
    ```
 
-3. **Train Static Model**
+3. **Train Static Model** 
    ```bash
    python scripts/train_static_model.py
    ```
@@ -129,4 +129,15 @@ ASLTranslator/
 - Open source the full codebase with pretrained models!
 
 ---
+
+## 👥 Group Members
+This section highlights the contributors who are part of the ASL Translator project. Each member plays a vital role in different stages, from data collection to model training and future developments.
+
+Name
+[Ian Hock]
+Nitin Chatlani
+[Anna Krassowizki]
+[Nate Bomar]
+[Diego Lopez]
+[Pranaav Srinivasan]
 
