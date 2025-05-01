@@ -48,7 +48,7 @@ This project enables real-time translation of American Sign Language (ASL) via w
    python scripts/update_master_csv.py
    ```
 
-3. **Train Static Model**
+3. **Train Static Model** 
    ```bash
    python scripts/train_static_model.py
    ```
