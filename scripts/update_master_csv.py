@@ -7,7 +7,7 @@ def update_master_csv(data_folder='data/processed', master_filename='training_da
     """
     Merge all session CSVs into a master CSV, adding session_id.
     """
-    #Get list of all CSV files matching the naming pattern (excluding the master file)
+    # Get list of all CSV files matching the naming pattern (excluding the master file)
     csv_files = glob.glob(os.path.join(data_folder, 'training_data_letters_*.csv'))
     
     # Filter out the master CSV itself if it already exists
