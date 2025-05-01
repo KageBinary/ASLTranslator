@@ -1,143 +1,103 @@
-# ASL Translator: Static, Dynamic, and Word Recognition
+# 🧠 ASL Translator – Real-Time Static and Dynamic Sign Recognition
 
-This project enables real-time translation of American Sign Language (ASL) via webcam. It currently supports static letter recognition (A–Y) and is expanding toward dynamic signs and full word recognition.
+This project is a real-time American Sign Language (ASL) translator that recognizes hand gestures from webcam input. It currently supports static ASL fingerspelling (A–Y), with future extensions planned for dynamic gestures and word-level recognition.
 
----
-
-## 🛠️ Components and What They Do
-
-| File/Folder | Purpose |
-|:---|:---|
-| `src/data_collectors/` | 📸 Scripts to collect hand pose data for static (letter) and dynamic (motion-based) signs. |
-| `src/models/` | 🧠 Defines neural network architectures for letters and word sequences. |
-| `src/pipeline/` | 👥 Pipelines for real-time translation: static, dynamic, and word-level. |
-| `src/preprocessing/` | 💡 Tools for data augmentation and sequence extraction. |
-| `src/utils/hand_detector.py` | ✋ Detects hands and extracts features using MediaPipe. |
-| `scripts/` | 📆 Training and evaluation scripts for static letters and words. |
-| `data/` | 📂 Raw, processed, and sequence data storage. |
-| `models/` | 🌐 Saved trained models and scalers. |
-| `app.py` | 📅 Main launcher (for future app integration). |
+> ✅ This repository contains only code and documentation. All large files (models, datasets) have been excluded as required.
 
 ---
 
-## 🛆 Libraries Used
+## 📦 Installation
 
-- **OpenCV** (`cv2`) — Webcam capture and processing
-- **MediaPipe** — Hand landmark detection
-- **NumPy** — Numerical operations
-- **Pandas** — CSV and data handling
-- **Joblib** — Saving models and scalers
-- **Scikit-learn** (`sklearn`) — Data scaling, splitting
-- **TensorFlow / Keras** — Deep learning models
-- **Matplotlib, Seaborn** — Data visualization
-- **Jupyter** — Notebook experiments
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/KageBinary/ASLTranslator.git
+   cd ASLTranslator
+   ```
+
+2. (Optional) Create a virtual environment:
+   ```bash
+   python -m venv venv
+   source venv/bin/activate  # Windows: venv\Scripts\activate
+   ```
+
+3. Install the dependencies:
+   ```bash
+   pip install -r requirements.txt
+   ```
 
 ---
 
-## 🔥 Workflow
+## 🚀 Usage
 
-### Static Letters (Fingerspelling)
+### Run the real-time translator:
+```bash
+python src/pipeline/static_translator.py
+```
 
-1. **Data Collection**
-   ```bash
-   python src/data_collectors/collect_static.py
-   ```
+### Collect training data for static signs:
+```bash
+python src/data_collectors/collect_static.py
+```
 
-2. **Update Master Dataset**
-   ```bash
-   python scripts/update_master_csv.py
-   ```
+### Update the dataset with new entries:
+```bash
+python scripts/update_master_csv.py
+```
 
-3. **Train Static Model** 
-   ```bash
-   python scripts/train_static_model.py
-   ```
-
-4. **Live Static Translator**
-   ```bash
-   python src/pipeline/static_translator.py
-   ```
-
-### Dynamic Signs (In Progress)
-- Collect motion-based sequences.
-- Train sequence models (`train_word_model.py`).
-- Run dynamic sign translator (`dynamic_translator.py`).
-
-### Word-Level Translation (In Progress)
-- Combine static and dynamic predictions.
-- Translate sequences of letters or gestures into full words (`word_translator.py`).
+### Train the recognition model:
+```bash
+python scripts/train_static_model.py
+```
 
 ---
 
-## 📆 Directory Structure
+## 📁 File Overview
 
 ```
 ASLTranslator/
-|
-|├— data/
-|   ├— processed/ —> Processed CSVs
-|   ├— raw/ —> Raw capture data
-|   ├— reference/ —> Reference images
-|   └— sequences/ —> Dynamic sequence captures
-|
-|├— models/
-|   ├— static/ —> Static letter models
-|   └— dynamic/ —> (planned) Dynamic models
-|
-|├— src/
-|   ├— data_collectors/
-|   ├— models/
-|   ├— pipeline/
-|   ├— preprocessing/
-|   ├— utils/
-|
-|├— scripts/
-|
-|├— notebooks/
-|
-|├— app.py
-|├— LICENSE
-|├— README.md
-|└— requirements.txt
+├── data/                # Raw and processed data (excluded from submission)
+├── models/              # Trained models (excluded from submission)
+├── scripts/             # Training and CSV update scripts
+├── src/                 # Source code for collection, translation, detection
+├── requirements.txt     # Python dependencies
+├── README.md            # This file
+└── LICENSE              # License info
 ```
 
 ---
 
-## ✨ Features
+## 📊 Output
 
-- 💬 Real-time static ASL letter translation
-- 💡 Data augmentation and sequence extraction for dynamic signs
-- 🧬 Early stopping and dynamic learning rate during training
-- 🔥 Light and fast model execution
-- 📢 Word-level translation planned!
+When the translator is running, a webcam window will show the input with live ASL letter predictions. Hold your hand steady to improve accuracy. Predictions are displayed in real time. Note: letters like **J** and **Z** are excluded due to their motion-based nature.
 
 ---
 
-## 📌 Notes
+## 🧰 Dependencies
 
-- Letters **J** and **Z** are excluded from static because they involve motion.
-- Good lighting and centered hands improve accuracy.
-- Future expansion includes **dynamic sequence detection** and **full word formation**!
-
----
-
-## 🎉 Future Goals
-
-- Train dynamic sequence models
-- Integrate dynamic and static recognizers
-- Build a simple web or desktop app for users
-- Open source the full codebase with pretrained models!
+- `opencv-python` – for webcam capture
+- `mediapipe` – for hand landmark detection
+- `tensorflow` – for training and inference
+- `pandas`, `numpy` – for data processing
+- `scikit-learn` – for preprocessing and model evaluation
 
 ---
 
-## 👥 Group Members
-This section highlights the contributors who are part of the ASL Translator project. Each member plays a vital role in different stages, from data collection to model training and future developments.
+## 👥 Contributors
 
-Name
-[Ian Hock]
-Nitin Chatlani
-[Anna Krassowizki]
-[Nate Bomar]
-[Diego Lopez]
-[Pranaav Srinivasan]
+Ian Hock  
+Nitin Chatlani  
+Ana Krassowizki  
+Nate Bomar  
+Diego Lopez  
+Pranaav Krishna Srinivasan
+
+---
+
+## 📚 References
+
+- [MediaPipe Hands](https://developers.google.com/mediapipe/solutions/vision/hand_landmarker) – Hand landmark detection API used for tracking.
+- [TensorFlow](https://www.tensorflow.org/) – Deep learning framework used for model training.
+- [scikit-learn](https://scikit-learn.org/stable/documentation.html) – Preprocessing, scaling, and evaluation tools.
+- [OpenCV Documentation](https://docs.opencv.org/) – For webcam and image processing.
+- [ASL Alphabet Reference](https://www.startasl.com/american-sign-language-alphabet/) – Used to guide label creation and validation.
 
